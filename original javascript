@@ -1,0 +1,46 @@
+document.addEventListener("DOMContentLoaded", () => {
+  const tabButtons = document.querySelectorAll(".tab-button");
+  const tabPanels = document.querySelectorAll(".tab-panel");
+  const cartItems = document.getElementById("cart-items");
+  let cart = [];
+
+  function activateTab(tabId) {
+    // Remove a classe 'active' de todos os botões e painéis
+    tabButtons.forEach(button => button.classList.remove("active"));
+    tabPanels.forEach(panel => panel.classList.remove("active"));
+
+    // Adiciona a classe 'active' ao botão e painel correspondentes
+    document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add("active");
+    document.getElementById(tabId).classList.add("active");
+  }
+
+  function updateCartDisplay() {
+    cartItems.innerHTML = cart.length > 0
+      ? cart.map(item => `<p>${item}</p>`).join('')
+      : '<p>Seu carrinho está vazio.</p>';
+  }
+
+  function addToCart(product) {
+    cart.push(product);
+    updateCartDisplay();
+    activateTab('cart');
+  }
+
+  // Define o comportamento de clique para cada botão de aba
+  tabButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      activateTab(button.getAttribute("data-tab"));
+    });
+  });
+
+  // Define o comportamento dos botões de adicionar ao carrinho
+  document.querySelectorAll(".add-to-cart").forEach(button => {
+    button.addEventListener("click", () => {
+      const product = button.getAttribute("data-product");
+      addToCart(product);
+    });
+  });
+
+  // Ativa a aba 'home' por padrão
+  activateTab('home');
+});
